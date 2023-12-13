@@ -1,19 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Contact Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
 </head>
 <body>
-   <form action="https://test-five-woad-32.vercel.app/api/process" method="post">
-       <label for="username">Username:</label>
-       <input type="text" id="username" name="username" required>
+    <form id="myForm">
+        <label for="name">Username:</label>
+        <input type="text" id="name" name="name" required>
 
-       <label for="password">Password:</label>
-       <input type="password" id="password" name="password" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
 
-       <input type="submit" value="Submit">
-   </form>
+        <input type="button" value="Submit" onclick="submitForm()">
+    </form>
+
+    <script>
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/api/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, password }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                alert(data); // Display the server response
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+    </script>
 </body>
 </html>
